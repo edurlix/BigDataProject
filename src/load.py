@@ -10,7 +10,13 @@ import pandas as pd
 from .paths import CLEAN, SERVING, ensure_dirs
 
 DB_PATH = SERVING / "observatorio.sqlite"
-TABLES = ("countries", "languages", "indicators", "join_orphans")
+TABLES = (
+    "countries",
+    "languages",
+    "indicators",
+    "join_orphans",
+    "excluded_entities",
+)
 
 
 def run_load(write_parquet: bool = False) -> Path:

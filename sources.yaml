@@ -1,10 +1,15 @@
-# Cinco fuentes del enunciado. Para la entrega: dejad exactamente TRES
-# activas (comentad o borrad las otras dos) y documentad la elección.
-#
-# url fija     → data/raw/{id}.{format}
-# url_template → data/raw/{id}_{iso2}.{format}
-#   marcadores: {iso2} {iso3}
+# Configuración del universo. Las URLs por país siguen soportadas por el
+# framework para compatibilidad, pero la entrega usa peticiones globales.
 
+universe: true
+
+# Equivalencias declarativas entre códigos externos e ISO3.
+code_aliases:
+  EL: GRC
+  UK: GBR
+  XK: XKX
+
+# Se conserva como muestra y para ejecutar pruebas pequeñas; no limita el universo.
 focus_countries:
   - { iso2: ES, iso3: ESP }
   - { iso2: FR, iso3: FRA }
@@ -22,8 +27,9 @@ sources:
 
   - id: worldbank_gdp
     name: World Bank — PIB per cápita (NY.GDP.PCAP.CD)
-    url_template: >-
-      https://api.worldbank.org/v2/country/{iso2}/indicator/NY.GDP.PCAP.CD?format=json&mrnev=1
+    url: >-
+      https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD?format=json&per_page=20000
+    paginate: worldbank
     format: json
     role: indicator
     transformer: worldbank_indicator
@@ -34,8 +40,8 @@ sources:
 
   - id: eurostat_pop
     name: Eurostat — población (demo_pjan)
-    url_template: >-
-      https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?format=JSON&lang=en&geo={iso2}&sex=T&age=TOTAL&time=2023
+    url: >-
+      https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?format=JSON&lang=en&sex=T&age=TOTAL
     format: json
     role: indicator
     transformer: eurostat_demo_pjan
@@ -43,10 +49,7 @@ sources:
       indicator_id: demo_pjan
       indicator_label: Population on 1 January
       unit: persons
-      time: "2023"
 
-  # --- Fuentes 4 y 5 (descomentad una/ambas solo si sustituís a otras;
-  #     en la entrega deben quedar exactamente TRES activas) ---
   - id: owid_life_expectancy
     name: Our World in Data — life expectancy (CSV)
     url: >-
@@ -58,12 +61,12 @@ sources:
       indicator_id: life_expectancy
       indicator_label: Life expectancy
       unit: years
-      year: "2023"
   
   - id: worldbank_pop
     name: World Bank — población total (SP.POP.TOTL)
-    url_template: >-
-      https://api.worldbank.org/v2/country/{iso2}/indicator/SP.POP.TOTL?format=json&mrnev=1
+    url: >-
+      https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json&per_page=20000
+    paginate: worldbank
     format: json
     role: indicator
     transformer: worldbank_indicator
@@ -71,3 +74,55 @@ sources:
       indicator_id: SP.POP.TOTL
       indicator_label: Population, total
       unit: persons
+
+  - id: worldbank_life_expectancy
+    name: World Bank — esperanza de vida (SP.DYN.LE00.IN)
+    url: >-
+      https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=20000
+    paginate: worldbank
+    format: json
+    role: indicator
+    transformer: worldbank_indicator
+    meta:
+      indicator_id: SP.DYN.LE00.IN
+      indicator_label: Life expectancy at birth
+      unit: years
+
+  - id: worldbank_unemployment
+    name: World Bank — desempleo (SL.UEM.TOTL.ZS)
+    url: >-
+      https://api.worldbank.org/v2/country/all/indicator/SL.UEM.TOTL.ZS?format=json&per_page=20000
+    paginate: worldbank
+    format: json
+    role: indicator
+    transformer: worldbank_indicator
+    meta:
+      indicator_id: SL.UEM.TOTL.ZS
+      indicator_label: Unemployment, total
+      unit: percent
+
+  - id: worldbank_internet
+    name: World Bank — uso de Internet (IT.NET.USER.ZS)
+    url: >-
+      https://api.worldbank.org/v2/country/all/indicator/IT.NET.USER.ZS?format=json&per_page=20000
+    paginate: worldbank
+    format: json
+    role: indicator
+    transformer: worldbank_indicator
+    meta:
+      indicator_id: IT.NET.USER.ZS
+      indicator_label: Individuals using the Internet
+      unit: percent
+
+  - id: worldbank_co2
+    name: World Bank — CO2 per cápita (EN.ATM.CO2E.PC)
+    url: >-
+      https://api.worldbank.org/v2/country/all/indicator/EN.ATM.CO2E.PC?format=json&per_page=20000
+    paginate: worldbank
+    format: json
+    role: indicator
+    transformer: worldbank_indicator
+    meta:
+      indicator_id: EN.ATM.CO2E.PC
+      indicator_label: CO2 emissions per capita
+      unit: metric tons per capita

@@ -17,6 +17,7 @@ class Source:
     transformer: str = "generic_passthrough"
     url: str | None = None
     url_template: str | None = None
+    paginate: str | None = None
     meta: dict[str, Any] = field(default_factory=dict)
 
     def resolve_url(self, iso2: str = "", iso3: str = "") -> str:
@@ -37,6 +38,8 @@ class FocusCountry:
 class Config:
     sources: list[Source]
     focus_countries: list[FocusCountry]
+    universe: bool = False
+    code_aliases: dict[str, str] = field(default_factory=dict)
 
 
 def load_config(path=SOURCES_YAML) -> Config:
@@ -44,4 +47,10 @@ def load_config(path=SOURCES_YAML) -> Config:
         raw = yaml.safe_load(f)
     sources = [Source(**s) for s in raw.get("sources", [])]
     focus = [FocusCountry(**c) for c in raw.get("focus_countries", [])]
-    return Config(sources=sources, focus_countries=focus)
+    aliases = raw.get("code_aliases") or raw.get("aliases") or {}
+    return Config(
+        sources=sources,
+        focus_countries=focus,
+        universe=bool(raw.get("universe", False)),
+        code_aliases={str(k): str(v) for k, v in aliases.items()},
+    )
