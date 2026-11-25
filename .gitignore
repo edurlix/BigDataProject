@@ -1,6 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
+kit_sesion_19.zip
 data/raw/*
 !data/raw/.gitkeep
 data/clean/*
@@ -14,5 +15,19 @@ informe/*
 !informe/.gitkeep
 
 .pytest_cache/
-__pycache__/
-*.pyc
+
+# Material de aula interno (no va al repo público)
+presentacion/
+*.tex
+*.pdf
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+SESION_*_aula*

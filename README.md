@@ -1,27 +1,30 @@
 # Observatorio país — framework mínimo (Práctica 1 Big Data)
 
-Esqueleto ETL alineado con el enunciado: **`raw → clean → serving`**.
-
-Sirve para arrancar con las tres URLs del PDF y **extenderlo a otras 2–3
-fuentes** sin romper la estructura.
+ETL de universo completo alineado con el enunciado:
+**`raw → clean/Parquet → serving/SQLite → Spark`**.
 
 ## Arranque
 
 ```bash
-cd practica_01_starter
-python3 -m venv .venv
-source .venv/bin/activate
+cd practica_01_BigData_starter
+py -3.11 -m venv C:\venvs\observatorio
+C:\venvs\observatorio\Scripts\activate
 pip install -r requirements.txt
 python -m src.pipeline
+python spark/job_01.py
 ```
+
+En Windows se recomienda una ruta corta para el entorno virtual porque el
+paquete PySpark contiene nombres largos.
 
 Salidas:
 
 | Zona | Ruta |
 | --- | --- |
 | bruto | `data/raw/*.json` + `data/raw/manifest.csv` |
-| limpio | `data/clean/countries.csv`, `languages.csv`, `indicators.csv`, `join_orphans.csv` |
+| limpio | CSV de auditoría + `countries.parquet`, `languages.parquet` y dataset Hive `indicators/` |
 | servicio | `data/serving/observatorio.sqlite` |
+| Spark | `data/serving/spark/cobertura_decada/` y `logs/spark-events/` |
 | fichas | `cards/ESP.md`, … |
 
 Reutilizar descargas ya hechas:
@@ -30,13 +33,17 @@ Reutilizar descargas ya hechas:
 python -m src.pipeline --skip-extract
 ```
 
+Forzar una actualización de raw: `python -m src.pipeline --force`.
+
 Pasos sueltos: `python -m src.extract` · `python -m src.transform` ·
 `python -m src.load` · `python -m src.build_cards`.
 
-## Elegir exactamente 3 de las 5 fuentes
+## Fuentes y universo
 
-En `sources.yaml` hay las cinco URLs del enunciado. Dejad **tres** activas
-(comentad o borrad las otras dos) y documentad la elección en el README.
+`sources.yaml` obtiene el perfil completo, seis series históricas WDI,
+Eurostat y OWID. Las equivalencias externas se declaran en `code_aliases`.
+El fichero `excluded_entities.csv` explica qué entidades no cumplen el
+criterio de país.
 
 ## Cómo cambiar o añadir URLs
 

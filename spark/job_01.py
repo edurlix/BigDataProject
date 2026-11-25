@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Cobertura por indicador y década con RDD, DataFrame, SQL y SQLite."""
 
 from __future__ import annotations

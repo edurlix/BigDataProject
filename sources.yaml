@@ -61,7 +61,7 @@ sources:
       indicator_id: life_expectancy
       indicator_label: Life expectancy
       unit: years
-  
+
   - id: worldbank_pop
     name: World Bank — población total (SP.POP.TOTL)
     url: >-
